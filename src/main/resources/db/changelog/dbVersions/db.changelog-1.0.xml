@@ -1,0 +1,24 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="Tiberiu" id="T-1.0" labels="create">
+        <tagDatabase tag="T-1.0"/>
+    </changeSet>
+
+    <changeSet author="Tiberiu" id="V-1.0" labels="create">
+        <createTable tableName="Artist">
+            <column name="id" type="NUMBER(9,0)" />
+            <column name="name" type="VARCHAR(32)"/>
+        </createTable>
+        <addNotNullConstraint tableName="Artist" columnName="id" columnDataType="NUMBER(9,0)"/>
+        <addPrimaryKey tableName="Artist" columnNames="id" />
+        <addNotNullConstraint tableName="Artist" columnDataType="VARCHAR(32)" columnName="name"/>
+        <rollback>
+            <dropTable tableName="Artist"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
