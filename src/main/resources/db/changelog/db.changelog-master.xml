@@ -19,6 +19,6 @@
     <!--<include file="classpath:/db/changelog/db.changelog-insert.xml"/>-->
 
     <!--For Maven-->
-    <!--<include file="src/main/resources/db/changelog/db.changelog-insert.xml"/>-->
+    <include file="src/main/resources/db/changelog/db.changelog-insert.xml"/>
 
 </databaseChangeLog>

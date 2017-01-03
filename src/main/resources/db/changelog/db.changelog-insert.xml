@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet author="me" id="T-1.3" labels="insert">
+    <changeSet author="Tiberiu" id="T-1.3" labels="insert">
         <preConditions>
             <sqlCheck expectedResult="3">
                 SELECT COUNT(*)
@@ -16,38 +16,30 @@
         <tagDatabase tag="T-1.3"/>
     </changeSet>
 
-    <changeSet author="me" id="V-1.3" labels="insert">
-        <insert tableName="identity">
-            <column name="identity_id" type="NUMBER(9,0)" value="1"/>
-            <column name="namespace" type="VARCHAR(32)" value="Strategic"/>
-            <column name="type" type="VARCHAR(32)" value="Customer"/>
-            <column name="instance" type="VARCHAR(256)" value="EMAGCO"/>
+    <changeSet author="Tiberiu" id="V-1.3" labels="insert">
+        <insert tableName="Artist">
+            <column name="name" type="VARCHAR(32)" value="Artist1"/>
         </insert>
 
-        <insert tableName="identity">
-            <column name="identity_id" type="NUMBER(9,0)" value="2"/>
-            <column name="namespace" type="VARCHAR(32)" value="WPG"/>
-            <column name="type" type="VARCHAR(32)" value="Customer"/>
-            <column name="instance" type="VARCHAR(256)" value="EMAG"/>
-        </insert>
-        
-        <insert tableName="relationship">
-            <column name="relationship_id" type="NUMBER(9,0)" value="1"/>
-            <column name="name" type="VARCHAR(32)" value="IS"/>
-            <column name="from_identity_id" type="NUMBER(9,0)" value="1"/>
-            <column name="to_identity_id" type="NUMBER(9,0)" value="2"/>
+        <insert tableName="Artist">
+            <column name="name" type="VARCHAR(32)" value="Artist2"/>
         </insert>
 
-        <insert tableName="relationship">
-            <column name="relationship_id" type="NUMBER(9,0)" value="2"/>
-            <column name="name" type="VARCHAR(32)" value="IS"/>
-            <column name="from_identity_id" type="NUMBER(9,0)" value="2"/>
-            <column name="to_identity_id" type="NUMBER(9,0)" value="1"/>
+        <insert tableName="Song">
+            <column name="name" type="VARCHAR(32)" value="Song1"/>
+            <column name="artist_id" type="INT" value="1"/>
+            <column name="location" type="VARCHAR(256)" value="location"/>
+        </insert>
+
+        <insert tableName="Song">
+            <column name="name" type="VARCHAR(32)" value="Song2"/>
+            <column name="artist_id" type="INT" value="2"/>
+            <column name="location" type="VARCHAR(256)" value="location"/>
         </insert>
 
         <rollback>
-            <delete tableName="relationship"/>
-            <delete tableName="identity"/>
+            <delete tableName="Song"/>
+            <delete tableName="Artist"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

@@ -1,20 +1,31 @@
 package com.dai.streaming.controller;
 
+import com.dai.streaming.dto.SongSearchDto;
+import com.dai.streaming.dto.SongSearchRequest;
+import com.dai.streaming.entity.Artist;
+import com.dai.streaming.entity.Song;
+import com.dai.streaming.services.AutoCompleteRepository;
 import com.dai.streaming.utils.MultipartFileSender;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tvasile on 12/2/2016.
@@ -22,6 +33,9 @@ import java.io.InputStream;
 @Controller
 @RequestMapping(value = "/")
 public class ViewController  {
+
+    @Autowired
+    AutoCompleteRepository autoComplete;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getArticle() {
@@ -38,6 +52,19 @@ public class ViewController  {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @ResponseBody
+    public SongSearchDto searchAutocomplete(@RequestBody @Valid SongSearchRequest songSearchRequest) {
+        SongSearchDto dto = new SongSearchDto();
+        List<Song> songs = autoComplete.findByNameIgnoreCaseContaining(songSearchRequest.getContains());
+        List<String> songNames = new ArrayList<>();
+        songs.forEach(song -> songNames.add(song.getName()));
+        dto.setSongNames(songNames);
+        dto.setSearchParam(songSearchRequest.getContains());
+
+        return dto;
     }
 
 }

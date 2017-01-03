@@ -1,0 +1,21 @@
+{
+  "name": "Music Streaming",
+  "homepage": "https://github.com/Shock21/DAI",
+  "authors": [
+    "Shock21 <tiberiu_alx@yahoo.com>"
+  ],
+  "description": "College Project with the purpose of making a music straming app",
+  "main": "DAI",
+  "keywords": [
+    "DAI"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -11,11 +11,12 @@
 
     <changeSet author="Tiberiu" id="V-1.0" labels="create">
         <createTable tableName="Artist">
-            <column name="id" type="NUMBER(9,0)" />
+            <column name="id" type="INT" />
             <column name="name" type="VARCHAR(32)"/>
         </createTable>
-        <addNotNullConstraint tableName="Artist" columnName="id" columnDataType="NUMBER(9,0)"/>
+        <addNotNullConstraint tableName="Artist" columnName="id" columnDataType="INT"/>
         <addPrimaryKey tableName="Artist" columnNames="id" />
+        <addAutoIncrement tableName="Artist" columnName="id" columnDataType="INT"/>
         <addNotNullConstraint tableName="Artist" columnDataType="VARCHAR(32)" columnName="name"/>
         <rollback>
             <dropTable tableName="Artist"/>

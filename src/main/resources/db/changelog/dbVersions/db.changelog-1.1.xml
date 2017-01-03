@@ -11,15 +11,16 @@
 
     <changeSet author="Tiberiu" id="V-1.1" labels="create">
         <createTable tableName="Song">
-            <column name="id" type="NUMBER(9,0)"/>
+            <column name="id" type="INT"/>
             <column name="name" type="VARCHAR(32)"/>
             <column name="artist_id" type="NUMBER(9,0)"/>
             <column name="location" type="VARCHAR(256)"/>
         </createTable>
-        <addNotNullConstraint tableName="Song" columnName="id" columnDataType="NUMBER(9,0)" />
+        <addNotNullConstraint tableName="Song" columnName="id" columnDataType="INT" />
         <addPrimaryKey tableName="Song" columnNames="id" />
+        <addAutoIncrement tableName="Song" columnName="id" columnDataType="INT"/>
         <addNotNullConstraint tableName="Song" columnDataType="VARCHAR(32)" columnName="name"/>
-        <addNotNullConstraint tableName="Song" columnDataType="NUMBER(9,0)" columnName="artist_id"/>
+        <addNotNullConstraint tableName="Song" columnDataType="INT" columnName="artist_id"/>
         <addNotNullConstraint tableName="Song" columnDataType="VARCHAR(256)" columnName="location"/>
         <rollback>
             <dropTable tableName="Song"/>

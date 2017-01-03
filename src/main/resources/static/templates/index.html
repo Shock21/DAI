@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-mass-autocomplete/massautocomplete.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"></script>
+
+    <script src="../js/index.js"></script>
+    <!-- Optional -->
+    <link href="../bower_components/angular-mass-autocomplete/massautocomplete.theme.css" rel="stylesheet" type="text/css">
+</head>
+
+<body ng-app=app>
+<div ng-controller=mainCtrl>
+    <div mass-autocomplete>
+        <input ng-model="dirty.value"
+               mass-autocomplete-item="autocomplete_options">
+    </div>
+</div>
+</body>
+</html>
