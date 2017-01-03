@@ -1,0 +1,21 @@
+------- Update -------
+mvn liquibase:update
+mvn liquibase:update -Dliquibase.chagesToApply=1
+mvn liquibase:update -Dliquibase.contexts="foreignKeys"
+mvn liquibase:update -Dliquibase.labels="foreignKeys"
+mvn liquibase:updateSQL -Dliquibase.migrationSqlOutputFile="src/main/resources/db/LiquibaseSQL/update.sql"
+
+------- Rollback -------
+mvn liquibase:rollback -Dliquibase.rollbackCount=1
+mvn liquibase:rollback -Dliquibase.rollbackTag=T-1.1
+mvn liquibase:futureRollbackSQL -Dliquibase.outputFile="src/main/resources/db/LiquibaseSQL/rollback.sql"
+
+------- Doc -------
+mvn liquibase:dbDoc -Dliquibase.outputDirectory="src/main/resources/doc"
+
+------- Generate Change Log -------
+mvn liquibase:generateChangeLog -Dliquibase.outputChangeLogFile="src/main/resources/db/changelog/generatedChangeLog.xml"
+mvn liquibase:generateChangeLog -Dliquibase.diffTypes=data -Dliquibase.outputChangeLogFile="src/main/resources/db/changelog/generatedChangeLog.xml"
+
+------- Diff -------
+mvn liquibase:diff
