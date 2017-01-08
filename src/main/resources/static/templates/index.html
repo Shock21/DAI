@@ -7,7 +7,8 @@
 
     <script src="../js/index.js"></script>
     <!-- Optional -->
-    <link href="../bower_components/angular-mass-autocomplete/massautocomplete.theme.css" rel="stylesheet" type="text/css">
+    <!-- <link href="../bower_components/angular-mass-autocomplete/massautocomplete.theme.css" rel="stylesheet" type="text/css">-->
+    <link href="../css/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body ng-app=app>
@@ -16,6 +17,14 @@
         <input ng-model="dirty.value"
                mass-autocomplete-item="autocomplete_options">
     </div>
+    <ul>
+        <li ng-repeat="tag in tags">
+            <span ng-mouseenter="showEdit = true" ng-mouseleave="showEdit = false">
+               {{tag}}
+                <a ng-show="showEdit" ng-click="$parent.deleteItem(tag)">Delete</a>
+            </span>
+        </li>
+    </ul>
 </div>
 </body>
 </html>

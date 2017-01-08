@@ -1,0 +1,8 @@
+.ng-isolate-scope {
+    display: table;
+}
+
+span {
+    display:table-cell;
+    vertical-align: middle;
+}
