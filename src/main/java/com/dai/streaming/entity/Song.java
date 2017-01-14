@@ -25,6 +25,9 @@ public class Song {
     private Artist artist;
 
     @Column @Getter @Setter
+    private Integer duration;
+
+    @Column @Getter @Setter
     String location;
 
 

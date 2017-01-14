@@ -1,17 +1,12 @@
 package com.dai.streaming.controller;
 
+import com.dai.streaming.dto.SongDto;
 import com.dai.streaming.dto.SongSearchDto;
-import com.dai.streaming.dto.SongSearchRequest;
-import com.dai.streaming.entity.Artist;
+import com.dai.streaming.dto.SongSearchRequestDto;
 import com.dai.streaming.entity.Song;
 import com.dai.streaming.services.AutoCompleteRepository;
 import com.dai.streaming.utils.MultipartFileSender;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +38,7 @@ public class ViewController  {
     @RequestMapping(value = "/audio", method = RequestMethod.GET)
     @ResponseBody
     public void playAudio(HttpServletRequest request, HttpServletResponse response) {
-        String path = "E:\\Disclosure-Help_Me_Lose_My_Mind.mp3";
+        String path = "E:\\MusicPlaylist\\Queen-We_Will_Rock_You.mp3";
         File file = new File(path);
         try {
             MultipartFileSender.fromFile(file).with(request).with(response).serveResource();
@@ -56,15 +49,23 @@ public class ViewController  {
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     @ResponseBody
-    public SongSearchDto searchAutocomplete(@RequestBody @Valid SongSearchRequest songSearchRequest) {
-        SongSearchDto dto = new SongSearchDto();
+    public SongSearchDto searchAutocomplete(@RequestBody @Valid SongSearchRequestDto songSearchRequest) {
+        SongSearchDto songSearchDto = new SongSearchDto();
+        SongDto songDto = new SongDto();
+        List<SongDto> songInfo = new ArrayList<>();
         List<Song> songs = autoComplete.findByNameIgnoreCaseContaining(songSearchRequest.getContains());
-        List<String> songNames = new ArrayList<>();
-        songs.forEach(song -> songNames.add(song.getName()));
-        dto.setSongNames(songNames);
-        dto.setSearchParam(songSearchRequest.getContains());
 
-        return dto;
+        songs.forEach(song -> {
+            songDto.setName(song.getName());
+            songDto.setArtist(song.getArtist().getName());
+            songDto.setDuration(song.getDuration());
+            songInfo.add(songDto);
+        });
+
+        songSearchDto.setSearchParam(songSearchRequest.getContains());
+        songSearchDto.setSongInfo(songInfo);
+
+        return songSearchDto;
     }
 
 }

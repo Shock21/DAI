@@ -13,7 +13,8 @@
         <createTable tableName="Song">
             <column name="id" type="INT"/>
             <column name="name" type="VARCHAR(32)"/>
-            <column name="artist_id" type="NUMBER(9,0)"/>
+            <column name="artist_id" type="INT"/>
+            <column name="duration" type="NUMBER(9,0)"/>
             <column name="location" type="VARCHAR(256)"/>
         </createTable>
         <addNotNullConstraint tableName="Song" columnName="id" columnDataType="INT" />

@@ -18,23 +18,25 @@
 
     <changeSet author="Tiberiu" id="V-1.3" labels="insert">
         <insert tableName="Artist">
-            <column name="name" type="VARCHAR(32)" value="Artist1"/>
+            <column name="name" type="VARCHAR(32)" value="Disclosure"/>
         </insert>
 
         <insert tableName="Artist">
-            <column name="name" type="VARCHAR(32)" value="Artist2"/>
+            <column name="name" type="VARCHAR(32)" value="Queen"/>
         </insert>
 
         <insert tableName="Song">
-            <column name="name" type="VARCHAR(32)" value="Song1"/>
+            <column name="name" type="VARCHAR(32)" value="Help Me Lose My Mind"/>
             <column name="artist_id" type="INT" value="1"/>
-            <column name="location" type="VARCHAR(256)" value="location"/>
+            <column name="duration" type="NUMBER(9,0)" value="236"/>
+            <column name="location" type="VARCHAR(256)" value="E:\MusicPlaylist\Disclosure-Help_Me_Lose_My_Mind.mp3"/>
         </insert>
 
         <insert tableName="Song">
-            <column name="name" type="VARCHAR(32)" value="Song2"/>
+            <column name="name" type="VARCHAR(32)" value="We Will Rock You"/>
             <column name="artist_id" type="INT" value="2"/>
-            <column name="location" type="VARCHAR(256)" value="location"/>
+            <column name="duration" type="NUMBER(9,0)" value="120"/>
+            <column name="location" type="VARCHAR(256)" value="E:\MusicPlaylist\Queen-We_Will_Rock_You.mp3"/>
         </insert>
 
         <rollback>

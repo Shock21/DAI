@@ -16,5 +16,5 @@ public class SongSearchDto {
     String searchParam;
 
     @Getter @Setter
-    List<String> songNames;
+    List<SongDto> songInfo;
 }
