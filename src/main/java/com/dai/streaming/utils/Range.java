@@ -47,6 +47,7 @@ class Range {
 
             while ((read = input.read(buffer)) > 0) {
                 if ((toRead -= read) > 0) {
+                    System.out.println(read + " " + toRead);
                     output.write(buffer, 0, read);
                     output.flush();
                 } else {

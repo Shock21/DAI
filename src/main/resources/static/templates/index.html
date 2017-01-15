@@ -4,7 +4,10 @@
     <script src="../bower_components/angular/angular.js"></script>
     <script src="../bower_components/moment/moment.js"></script>
     <script src="../bower_components/angular-mass-autocomplete/massautocomplete.js"></script>
+    <script src="../bower_components/angular-audio/app/angular.audio.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"></script>
+    <script src="https://cdn.bootcss.com/aplayer/1.5.8/APlayer.min.js"></script>
 
     <script src="../js/index.js"></script>
     <!-- Optional -->
@@ -15,21 +18,14 @@
 <body ng-app=app>
                 <div ng-controller=mainCtrl class="container">
                     <div mass-autocomplete class="inside">
+
+                        <div id="title">Test Player</div>
+                        <div id="author">by Vasile Tiberiu</div> <br>
+
                         <input ng-model="dirty.value"
                                mass-autocomplete-item="autocomplete_options">
-                        <ul>
-                            <li ng-repeat="tag in tags">
-                                <!--<span ng-mouseenter="showEdit = true" ng-mouseleave="showEdit = false">-->
-                                <!--{{tag.}}-->
-                                <!--<a ng-show="showEdit" ng-click="$parent.deleteItem(tag)">Delete</a>-->
-                                <!--</span>-->
-                                <div class="plItem">
-                                    <div class="plNum">{{tag.number}}.</div>
-                                    <div class="plTitle">{{tag.value}} -- {{tag.artist}}</div>
-                                    <div class="plLength">{{tag.duration}}</div>
-                                </div>
-                            </li>
-                        </ul>
+
+                        <div id="player" class="aplayer"></div>
                     </div>
                 </div>
 </body>

@@ -33,10 +33,24 @@
         </insert>
 
         <insert tableName="Song">
+            <column name="name" type="VARCHAR(32)" value="Magnets"/>
+            <column name="artist_id" type="INT" value="1"/>
+            <column name="duration" type="NUMBER(9,0)" value="214"/>
+            <column name="location" type="VARCHAR(256)" value="E:\MusicPlaylist\Disclosure-Magnets.mp3"/>
+        </insert>
+
+        <insert tableName="Song">
             <column name="name" type="VARCHAR(32)" value="We Will Rock You"/>
             <column name="artist_id" type="INT" value="2"/>
             <column name="duration" type="NUMBER(9,0)" value="120"/>
             <column name="location" type="VARCHAR(256)" value="E:\MusicPlaylist\Queen-We_Will_Rock_You.mp3"/>
+        </insert>
+
+        <insert tableName="Song">
+            <column name="name" type="VARCHAR(32)" value="We Are The Champions"/>
+            <column name="artist_id" type="INT" value="2"/>
+            <column name="duration" type="NUMBER(9,0)" value="181"/>
+            <column name="location" type="VARCHAR(256)" value="E:\MusicPlaylist\Queen-We_Are_The_Champions.mp3"/>
         </insert>
 
         <rollback>

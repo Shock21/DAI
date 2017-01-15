@@ -18,4 +18,5 @@ public class Artist {
 
     @Column @Getter @Setter
     String name;
+
 }

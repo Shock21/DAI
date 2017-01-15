@@ -16,5 +16,11 @@ public class SongSearchDto {
     String searchParam;
 
     @Getter @Setter
+    String artistName;
+
+    @Getter @Setter
+    Boolean artistSearch;
+
+    @Getter @Setter
     List<SongDto> songInfo;
 }

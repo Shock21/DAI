@@ -3,15 +3,15 @@ package com.dai.streaming.controller;
 import com.dai.streaming.dto.SongDto;
 import com.dai.streaming.dto.SongSearchDto;
 import com.dai.streaming.dto.SongSearchRequestDto;
+import com.dai.streaming.entity.Artist;
 import com.dai.streaming.entity.Song;
 import com.dai.streaming.services.AutoCompleteRepository;
+import com.dai.streaming.services.AutoCompleteRepositoryArtist;
 import com.dai.streaming.utils.MultipartFileSender;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +30,9 @@ public class ViewController  {
     @Autowired
     AutoCompleteRepository autoComplete;
 
+    @Autowired
+    AutoCompleteRepositoryArtist autoCompleteArtist;
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getArticle() {
         return "index";
@@ -37,13 +40,14 @@ public class ViewController  {
 
     @RequestMapping(value = "/audio", method = RequestMethod.GET)
     @ResponseBody
-    public void playAudio(HttpServletRequest request, HttpServletResponse response) {
-        String path = "E:\\MusicPlaylist\\Queen-We_Will_Rock_You.mp3";
-        File file = new File(path);
+    public void playAudio(HttpServletRequest request, HttpServletResponse response, @RequestParam("song") String songName) {
+        Song song = autoComplete.findByName(songName);
+        System.out.println(" ---------- " + songName + " ---------- ");
+        File file = new File(song.getLocation());
         try {
             MultipartFileSender.fromFile(file).with(request).with(response).serveResource();
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -51,11 +55,22 @@ public class ViewController  {
     @ResponseBody
     public SongSearchDto searchAutocomplete(@RequestBody @Valid SongSearchRequestDto songSearchRequest) {
         SongSearchDto songSearchDto = new SongSearchDto();
-        SongDto songDto = new SongDto();
+        Boolean artistPlaylist = false;
         List<SongDto> songInfo = new ArrayList<>();
-        List<Song> songs = autoComplete.findByNameIgnoreCaseContaining(songSearchRequest.getContains());
+        List<Song> songs = null;
+
+        Artist artist = autoCompleteArtist.findByNameIgnoreCaseContaining(songSearchRequest.getContains());
+
+        if(artist != null) {
+            songs = autoComplete.findByArtist(artist);
+            artistPlaylist = true;
+            songSearchDto.setArtistName(artist.getName());
+        } else {
+            songs = autoComplete.findByNameIgnoreCaseStartsWith(songSearchRequest.getContains());
+        }
 
         songs.forEach(song -> {
+            SongDto songDto = new SongDto();
             songDto.setName(song.getName());
             songDto.setArtist(song.getArtist().getName());
             songDto.setDuration(song.getDuration());
@@ -63,6 +78,7 @@ public class ViewController  {
         });
 
         songSearchDto.setSearchParam(songSearchRequest.getContains());
+        songSearchDto.setArtistSearch(artistPlaylist);
         songSearchDto.setSongInfo(songInfo);
 
         return songSearchDto;

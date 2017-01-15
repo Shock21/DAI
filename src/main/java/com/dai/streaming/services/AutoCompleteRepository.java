@@ -1,5 +1,6 @@
 package com.dai.streaming.services;
 
+import com.dai.streaming.entity.Artist;
 import com.dai.streaming.entity.Song;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,5 +11,9 @@ import java.util.List;
  */
 public interface AutoCompleteRepository extends JpaRepository<Song, Long> {
 
-    List<Song> findByNameIgnoreCaseContaining(String name);
+    List<Song> findByNameIgnoreCaseStartsWith(String name);
+
+    List<Song> findByArtist(Artist artist);
+
+    Song findByName(String name);
 }
