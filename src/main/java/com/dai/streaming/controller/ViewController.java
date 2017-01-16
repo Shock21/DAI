@@ -10,6 +10,7 @@ import com.dai.streaming.services.AutoCompleteRepositoryArtist;
 import com.dai.streaming.utils.MultipartFileSender;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +34,19 @@ public class ViewController  {
     @Autowired
     AutoCompleteRepositoryArtist autoCompleteArtist;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String getArticle() {
         return "index";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
+        return "login";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public HttpStatus makeRegister() {
+        return HttpStatus.OK;
     }
 
     @RequestMapping(value = "/audio", method = RequestMethod.GET)

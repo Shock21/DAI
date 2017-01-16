@@ -1,0 +1,122 @@
+html, body {
+    background-color:#111;
+}
+
+.inside {
+    position: absolute;
+    background-color: #231F20;
+    width: 50%; /*can be in percentage also.*/
+    height: 50%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+#title {
+    font-size: 2em;
+    position: relative;
+    text-align: center;
+    color: #ffffff;
+}
+#author {
+    left: 35px;
+    font-size: 1.25em;
+    position: relative;
+    text-align: center;
+    color: #ffffff;
+}
+
+.centered {
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.pageTitle {
+    position: relative;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 1.6em;
+
+    bottom: 20px;
+}
+
+.innerLink {
+    position: relative;
+    top: 20px;
+}
+
+a {
+    color: white;
+}
+
+.login {
+    position: relative;
+    top: 60px;
+}
+
+.login label{
+    color: #FFFFFF;
+}
+
+.login input{
+    display: inline-block;
+    position: relative;
+}
+
+.register {
+    position: relative;
+    top: 60px;
+    display: none;
+}
+
+.register label{
+    color: #FFFFFF;
+}
+
+.register input{
+    display: inline-block;
+    position: relative;
+}
+
+.login input[type="submit"] {
+    background-color: #5C5655;
+    border: none;
+    color: black;
+    top:10px;
+    padding: 7px 35px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+
+}
+
+.login input[type="submit"]:hover {
+    background-color: #FFFFFF;
+}
+
+.register input[type="submit"] {
+    background-color: #5C5655;
+    border: none;
+    color: black;
+    top:10px;
+    padding: 7px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.register input[type="submit"]:hover {
+    background-color: #FFFFFF;
+}
+
+#player {
+    position: relative;
+    display: inline-block;
+    float: right;
+    width: 75%;
+    background-color: #ffffff;
+}
