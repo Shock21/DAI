@@ -1,4 +1,4 @@
-package com.dai.streaming.services;
+package com.dai.streaming.repository;
 
 import com.dai.streaming.entity.Artist;
 import com.dai.streaming.entity.Song;

@@ -2,37 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <link href="../css/login.css" rel="stylesheet" type="text/css">
+    <link href="../css/common.css" rel="stylesheet" type="text/css">
 </head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script>
-
-    $(document).ready(function () {
-
-        $('.link').on('click', function (e) {
-
-            e.preventDefault();
-
-            var id = $(e.target).attr('id');
-            if(id == 'login'){
-                $('.login').show();
-                $('.register').hide();
-            }else if(id == 'register'){
-                $('.login').hide();
-                $('.register').show();
-            }
-
-        });
-
-    });
-
-
-</script>
 
 <body>
                 <div class="container">
                     <div class="inside">
-                        <div id="title">Test Player</div>
+                        <div id="title">ZaMusic</div>
                         <div id="author">by Vasile Tiberiu</div>
 
                         <div class="login">
@@ -44,41 +20,17 @@
 
                                     <label>Password</label><br>
                                     <input required placeholder="Enter Password" type="password" name="password"><br>
+
                                     <input type='hidden' value='${_csrf.token}' name='${_csrf.parameterName}'/>
                                     <input type="submit" value="Login">
 
 
                                     <div class="innerLink">
                                         <label>No account?</label>
-                                            <strong><a class="link" href="#register" id="register">Register</a></strong>
+                                            <strong><a class="link" href="/register" id="login">Register</a></strong>
                                     </div>
                             </form>
                         </div>
-
-                        <div class="register">
-                            <!--TODO: insert script ( insert.php ) for REGISTER-->
-                            <form action="#" th:action="@{/register}" method="post" class="centered">
-
-                                    <span class="pageTitle">Registration Page</span><br>
-                                    <label>E-Mail</label><br>
-                                    <input required placeholder="Enter E-Mail" type="email" name="EMail"><br>
-
-                                    <label>Username</label><br>
-                                    <input required placeholder="Enter Username" type="text" name="Username"><br>
-
-                                    <label>Password</label><br>
-                                    <input required placeholder="Enter Password" type="password" name="Password"><br>
-
-                                    <input type="submit" value="Register">
-
-
-                                    <div class="innerLink">
-                                        <label>Take me back to </label>
-                                            <strong><a class="link" href="#login" id="login">Login</a></strong>
-                                    </div>
-                            </form>
-                        </div>
-
 
                     </div>
                 </div>

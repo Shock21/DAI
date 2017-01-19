@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <link href="../css/common.css" rel="stylesheet" type="text/css">
+</head>
+
+
+<body>
+<div class="container">
+    <div class="inside">
+        <div id="title">ZaMusic</div>
+        <div id="author">by Vasile Tiberiu</div>
+
+        <div class="register">
+            <form th:action="@{/register}" th:object="${userForm}" method="post" class="centered">
+                <span class="pageTitle">Registration Page</span><br>
+                <label>Username</label><br>
+                <input required placeholder="Enter Username" type="text" name="username"><br>
+
+                <label>Password</label><br>
+                <input required placeholder="Enter Password" type="password" name="password"><br>
+
+                <label>PasswordConfirm</label><br>
+                <input required placeholder="Confirm Password" type="password" name="passwordConfirm"><br>
+
+                <input type='hidden' value='${_csrf.token}' name='${_csrf.parameterName}'/>
+                <input type="submit" value="Register">
+
+
+                <div class="innerLink">
+                    <label>Take me back to </label>
+                    <strong><a class="link" href="/login" id="login">Login</a></strong>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>

@@ -10,16 +10,18 @@
     </changeSet>
 
     <changeSet author="Tiberiu" id="V-1.0" labels="create">
-        <createTable tableName="Artist">
+        <createTable tableName="User">
             <column name="id" type="INT" />
-            <column name="name" type="VARCHAR(32)"/>
+            <column name="username" type="VARCHAR(32)"/>
+            <column name="password" type="VARCHAR(128)"/>
         </createTable>
-        <addNotNullConstraint tableName="Artist" columnName="id" columnDataType="INT"/>
-        <addPrimaryKey tableName="Artist" columnNames="id" />
-        <addAutoIncrement tableName="Artist" columnName="id" columnDataType="INT"/>
-        <addNotNullConstraint tableName="Artist" columnDataType="VARCHAR(32)" columnName="name"/>
+        <addNotNullConstraint tableName="User" columnName="id" columnDataType="INT"/>
+        <addPrimaryKey tableName="User" columnNames="id" />
+        <addAutoIncrement tableName="User" columnName="id" columnDataType="INT"/>
+        <addNotNullConstraint tableName="User" columnDataType="VARCHAR(32)" columnName="username"/>
+        <addNotNullConstraint tableName="User" columnDataType="VARCHAR(128)" columnName="password"/>
         <rollback>
-            <dropTable tableName="Artist"/>
+            <dropTable tableName="User"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

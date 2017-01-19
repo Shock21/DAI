@@ -12,7 +12,7 @@
 
     <script src="../js/index.js"></script>
     <!-- Optional -->
-    <link href="../css/index.css" rel="stylesheet" type="text/css">
+    <link href="../css/common.css" rel="stylesheet" type="text/css">
     <link href="../bower_components/angular-mass-autocomplete/massautocomplete.theme.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -22,8 +22,9 @@
 
                         <form th:action="@{/logout}" method="post">
                             <input type="submit" value="Sign Out"/>
+                            <p th:text="${username}"></p>
                         </form> <br>
-                        <div id="title">Test Player</div>
+                        <div id="title">ZaMusic</div>
                         <div id="author">by Vasile Tiberiu</div> <br>
 
                         <input id="auto" ng-model="dirty.value"

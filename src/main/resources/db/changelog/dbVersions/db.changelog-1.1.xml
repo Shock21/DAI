@@ -10,22 +10,16 @@
     </changeSet>
 
     <changeSet author="Tiberiu" id="V-1.1" labels="create">
-        <createTable tableName="Song">
-            <column name="id" type="INT"/>
+        <createTable tableName="Artist">
+            <column name="id" type="INT" />
             <column name="name" type="VARCHAR(32)"/>
-            <column name="artist_id" type="INT"/>
-            <column name="duration" type="NUMBER(9,0)"/>
-            <column name="location" type="VARCHAR(256)"/>
         </createTable>
-        <addNotNullConstraint tableName="Song" columnName="id" columnDataType="INT" />
-        <addPrimaryKey tableName="Song" columnNames="id" />
-        <addAutoIncrement tableName="Song" columnName="id" columnDataType="INT"/>
-        <addNotNullConstraint tableName="Song" columnDataType="VARCHAR(32)" columnName="name"/>
-        <addNotNullConstraint tableName="Song" columnDataType="INT" columnName="artist_id"/>
-        <addNotNullConstraint tableName="Song" columnDataType="VARCHAR(256)" columnName="location"/>
+        <addNotNullConstraint tableName="Artist" columnName="id" columnDataType="INT"/>
+        <addPrimaryKey tableName="Artist" columnNames="id" />
+        <addAutoIncrement tableName="Artist" columnName="id" columnDataType="INT"/>
+        <addNotNullConstraint tableName="Artist" columnDataType="VARCHAR(32)" columnName="name"/>
         <rollback>
-            <dropTable tableName="Song"/>
+            <dropTable tableName="Artist"/>
         </rollback>
     </changeSet>
-
 </databaseChangeLog>

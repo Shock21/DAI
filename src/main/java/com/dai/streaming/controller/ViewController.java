@@ -5,13 +5,20 @@ import com.dai.streaming.dto.SongSearchDto;
 import com.dai.streaming.dto.SongSearchRequestDto;
 import com.dai.streaming.entity.Artist;
 import com.dai.streaming.entity.Song;
-import com.dai.streaming.services.AutoCompleteRepository;
-import com.dai.streaming.services.AutoCompleteRepositoryArtist;
+import com.dai.streaming.entity.User;
+import com.dai.streaming.repository.AutoCompleteRepository;
+import com.dai.streaming.repository.AutoCompleteRepositoryArtist;
+import com.dai.streaming.services.AutoCompleteService;
+import com.dai.streaming.services.MusicService;
+import com.dai.streaming.services.UserService;
 import com.dai.streaming.utils.MultipartFileSender;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.dai.streaming.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,70 +36,60 @@ import java.util.List;
 public class ViewController  {
 
     @Autowired
-    AutoCompleteRepository autoComplete;
+    private UserService userService;
 
     @Autowired
-    AutoCompleteRepositoryArtist autoCompleteArtist;
+    private MusicService musicService;
+
+    @Autowired
+    private UserValidator userValidator;
+
+    @Autowired
+    private AutoCompleteService autoCompleteService;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String getArticle() {
+    public String getIndex(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
+        model.addAttribute("username", name);
         return "index";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
+    public String getLogin() {
         return "login";
     }
 
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String getRegister(Model model) {
+        model.addAttribute("userForm", new User());
+        return "register";
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public HttpStatus makeRegister() {
-        return HttpStatus.OK;
+    public String Register(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
+
+        userValidator.validate(userForm, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+
+        userService.save(userForm);
+
+        return "redirect:/home";
     }
 
     @RequestMapping(value = "/audio", method = RequestMethod.GET)
     @ResponseBody
     public void playAudio(HttpServletRequest request, HttpServletResponse response, @RequestParam("song") String songName) {
-        Song song = autoComplete.findByName(songName);
-        System.out.println(" ---------- " + songName + " ---------- ");
-        File file = new File(song.getLocation());
-        try {
-            MultipartFileSender.fromFile(file).with(request).with(response).serveResource();
-        } catch (Exception e) {
-
-        }
+        musicService.play(songName, request, response);
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     @ResponseBody
     public SongSearchDto searchAutocomplete(@RequestBody @Valid SongSearchRequestDto songSearchRequest) {
-        SongSearchDto songSearchDto = new SongSearchDto();
-        Boolean artistPlaylist = false;
-        List<SongDto> songInfo = new ArrayList<>();
-        List<Song> songs = null;
-
-        Artist artist = autoCompleteArtist.findByNameIgnoreCaseContaining(songSearchRequest.getContains());
-
-        if(artist != null) {
-            songs = autoComplete.findByArtist(artist);
-            artistPlaylist = true;
-            songSearchDto.setArtistName(artist.getName());
-        } else {
-            songs = autoComplete.findByNameIgnoreCaseStartsWith(songSearchRequest.getContains());
-        }
-
-        songs.forEach(song -> {
-            SongDto songDto = new SongDto();
-            songDto.setName(song.getName());
-            songDto.setArtist(song.getArtist().getName());
-            songDto.setDuration(song.getDuration());
-            songInfo.add(songDto);
-        });
-
-        songSearchDto.setSearchParam(songSearchRequest.getContains());
-        songSearchDto.setArtistSearch(artistPlaylist);
-        songSearchDto.setSongInfo(songInfo);
-
-        return songSearchDto;
+        return autoCompleteService.search(songSearchRequest);
     }
 
 }

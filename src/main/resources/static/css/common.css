@@ -68,7 +68,6 @@ a {
 .register {
     position: relative;
     top: 60px;
-    display: none;
 }
 
 .register label{
@@ -119,4 +118,10 @@ a {
     float: right;
     width: 75%;
     background-color: #ffffff;
+}
+
+p {
+    position: relative;
+    display: inline-block;
+    color: white;
 }
