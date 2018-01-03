@@ -46,8 +46,8 @@ public class AutoCompleteServiceImpl implements AutoCompleteService {
 
         songs.forEach(song -> {
             SongDto songDto = new SongDto();
-            songDto.setName(song.getName());
-            songDto.setArtist(song.getArtist().getName());
+            songDto.setSongTitle(song.getName());
+            songDto.setArtistName(song.getArtist().getName());
             songDto.setDuration(song.getDuration());
             songInfo.add(songDto);
         });

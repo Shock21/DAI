@@ -2,9 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular/angular.min.js"></script>
+
     <script src="../bower_components/moment/moment.js"></script>
-    <script src="../bower_components/angular-mass-autocomplete/massautocomplete.js"></script>
+    <script src="../bower_components/angular-mass-autocomplete/massautocomplete.min.js"></script>
     <script src="../bower_components/angular-audio/app/angular.audio.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"></script>
@@ -31,7 +32,25 @@
                                mass-autocomplete-item="autocomplete_options">
 
                         <div id="player" class="aplayer"></div>
+
+                        <div class="container">
+
+                            <div class="expandcollapse-item">
+                                <div ng-click="active = !active; getLyrics()" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}">
+                                    <p>Lyrics</p></p>
+                                </div>
+
+                                <div class="slideDown" ng-hide="active">
+                                    <div class="expand-collapse-content">
+                                        {{songLyrics}}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
+
+
                 </div>
 </body>
 </html>

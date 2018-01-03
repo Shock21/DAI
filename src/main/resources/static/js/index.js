@@ -3,6 +3,8 @@ app.controller('mainCtrl', function ($scope, $http, $sce, $q, ngAudio) {
     $scope.dirty = {};
     $scope.tags = [];
     $scope.results = [];
+    $scope.songLyrics = {};
+    $scope.active = true;
 
     function add_tag(selected) {
         //$scope.tags.push(selected);
@@ -15,8 +17,11 @@ app.controller('mainCtrl', function ($scope, $http, $sce, $q, ngAudio) {
         });
     }
 
-    $scope.play = function(songName) {
-
+    $scope.getLyrics = function() {
+        $http.post('/lyrics')
+            .then(function (response) {
+                $scope.songLyrics = response.data;
+            });
     }
 
     function convert_duration(duration) {
@@ -35,17 +40,17 @@ app.controller('mainCtrl', function ($scope, $http, $sce, $q, ngAudio) {
                 if(response.data.artistSearch) {
                     var music = [];
                     angular.forEach(response.data.songInfo, function (song) {
-                        music.push({title : song.name, author : song.artist , url : 'http://localhost:8080/audio?song=' + song.name});
+                        music.push({title : song.songTitle, author : song.artistName , url : 'http://localhost:8080/audio?songName=' + song.songTitle  + '&artistName=' + song.artistName});
                     });
                     results.push({label : $sce.trustAsHtml(response.data.artistName), value : response.data.artistName, music_data: music});
                 } else {
                     angular.forEach(response.data.songInfo, function (song) {
                         var music = [{
-                            title: song.name,
-                            author: song.artist,
-                            url: 'http://localhost:8080/audio?song=' + song.name
+                            title: song.songTitle,
+                            author: song.artistName,
+                            url: 'http://localhost:8080/audio?songName=' + song.songTitle + '&artistName=' + song.artistName
                         }];
-                        results.push({label: $sce.trustAsHtml(song.name), value: song.name, music_data: music})
+                        results.push({label: $sce.trustAsHtml(song.name), value: song.songTitle, music_data: music})
                     });
                 }
 
@@ -59,3 +64,6 @@ app.controller('mainCtrl', function ($scope, $http, $sce, $q, ngAudio) {
         on_select: add_tag
     };
 });
+
+
+

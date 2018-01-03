@@ -12,12 +12,12 @@ import javax.persistence.*;
 public class SongDto {
 
     @Getter @Setter
-    String name;
+    String songTitle;
 
     @Getter @Setter
     private Integer duration;
 
     @Getter @Setter
-    private String artist;
+    private String artistName;
 
 }

@@ -1,17 +1,13 @@
 package com.dai.streaming.controller;
 
-import com.dai.streaming.dto.SongDto;
+import com.dai.streaming.dto.CurrentSong;
 import com.dai.streaming.dto.SongSearchDto;
 import com.dai.streaming.dto.SongSearchRequestDto;
-import com.dai.streaming.entity.Artist;
-import com.dai.streaming.entity.Song;
 import com.dai.streaming.entity.User;
-import com.dai.streaming.repository.AutoCompleteRepository;
-import com.dai.streaming.repository.AutoCompleteRepositoryArtist;
 import com.dai.streaming.services.AutoCompleteService;
+import com.dai.streaming.services.LyricsService;
 import com.dai.streaming.services.MusicService;
 import com.dai.streaming.services.UserService;
-import com.dai.streaming.utils.MultipartFileSender;
 import com.dai.streaming.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,16 +20,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by tvasile on 12/2/2016.
  */
 @Controller
 @RequestMapping(value = "/")
-public class ViewController  {
+public class MusicPlayerController  {
 
     @Autowired
     private UserService userService;
@@ -46,6 +39,12 @@ public class ViewController  {
 
     @Autowired
     private AutoCompleteService autoCompleteService;
+
+    @Autowired
+    private LyricsService lyricsService;
+
+    @Autowired
+    private CurrentSong currentSong;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String getIndex(Model model) {
@@ -82,7 +81,9 @@ public class ViewController  {
 
     @RequestMapping(value = "/audio", method = RequestMethod.GET)
     @ResponseBody
-    public void playAudio(HttpServletRequest request, HttpServletResponse response, @RequestParam("song") String songName) {
+    public void playAudio(HttpServletRequest request, HttpServletResponse response, @RequestParam("songName") String songName, @RequestParam("artistName") String artistName) {
+        currentSong.setSongTitle(songName);
+        currentSong.setArtistName(artistName);
         musicService.play(songName, request, response);
     }
 
@@ -90,6 +91,12 @@ public class ViewController  {
     @ResponseBody
     public SongSearchDto searchAutocomplete(@RequestBody @Valid SongSearchRequestDto songSearchRequest) {
         return autoCompleteService.search(songSearchRequest);
+    }
+
+    @RequestMapping(value = "/lyrics", method = RequestMethod.POST)
+    @ResponseBody
+    public String getLyrics() {
+        return lyricsService.getLyrics(currentSong);
     }
 
 }
