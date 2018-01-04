@@ -79,7 +79,7 @@ public class MusicPlayerController  {
         return "redirect:/home";
     }
 
-    @RequestMapping(value = "/audio", method = RequestMethod.GET)
+    @RequestMapping(value = "/play", method = RequestMethod.GET)
     @ResponseBody
     public void playAudio(HttpServletRequest request, HttpServletResponse response, @RequestParam("songName") String songName, @RequestParam("artistName") String artistName) {
         currentSong.setSongTitle(songName);

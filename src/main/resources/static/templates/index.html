@@ -5,13 +5,16 @@
     <script src="../bower_components/angular/angular.min.js"></script>
 
     <script src="../bower_components/moment/moment.js"></script>
-    <script src="../bower_components/angular-mass-autocomplete/massautocomplete.min.js"></script>
+    <script src="../bower_components/angular-mass-autocomplete/massautocomplete.js"></script>
     <script src="../bower_components/angular-audio/app/angular.audio.js"></script>
+    <script src="../bower_components/angular-soundmanager2/dist/angular-soundmanager2.min.js"></script>
+    <script src="../bower_components/written-number/dist/written-number.min.js"
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"></script>
     <script src="https://cdn.bootcss.com/aplayer/1.5.8/APlayer.min.js"></script>
 
     <script src="../js/index.js"></script>
+    <script src="../js/convert-service.js"></script>
     <!-- Optional -->
     <link href="../css/common.css" rel="stylesheet" type="text/css">
     <link href="../bower_components/angular-mass-autocomplete/massautocomplete.theme.css" rel="stylesheet" type="text/css">
@@ -29,9 +32,9 @@
                         <div id="author">by Vasile Tiberiu</div> <br>
 
                         <input id="auto" ng-model="dirty.value"
-                               mass-autocomplete-item="autocomplete_options">
+                               mass-autocomplete-item="ac_options_users">
 
-                        <div id="player" class="aplayer"></div>
+                        <!-- <div id="player" class="aplayer"></div> -->
 
                         <div class="container">
 
@@ -47,6 +50,79 @@
                                 </div>
                             </div>
 
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <h5>Songs</h5>
+                            <ul>
+                                <li ng-repeat="song in songs">
+                                    <button music-player="play" add-song="song">{( song.title )}</button>
+                                    <button music-player add-song="song">+</button>
+                                </li>
+                            </ul>
+
+                            <button play-all="songs">Play all</button>
+                            <button play-all="songs" data-play="false">Add all</button>
+
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- init soundManager2 player -->
+                            <sound-manager></sound-manager>
+
+                            <p>
+                                Currently Playing: {( currentPlaying.title )} by {( currentPlaying.artist )} ({( currentPostion )} / {( currentDuration )})
+                            </p>
+
+                            <div class="seekBase" seek-track>
+                                <div class="seekLoad" ng-style="{width : ( progress + '%' ) }"></div>
+                            </div>
+                            <br />
+                            <button play-music>Play</button>
+                            -
+                            <button pause-music>Pause</button>
+                            -
+                            <button stop-music>Stop</button>
+                            -
+                            <button repeat-music>Repeat ({( repeat )})</button>
+                            -
+                            <button play-pause-toggle data-play="Play!" data-pause="Pause!">Play Toggle</button>
+
+                            Is Playing: {( isPlaying )}
+                            <br/>
+                            <br/>Volume: {( volume )} -
+                            <button music-volume data-type="increase">+</button>
+                            -
+                            <button music-volume data-type="decrease">-</button>
+                            -
+                            <button mute-music>Mute ({( mute )})</button>
+                            <br/>
+                            <br/>
+                            <button prev-track>Prev Track</button>
+                            -
+                            <button next-track>Next Track</button>
+                            -
+                            <button clear-playlist>Clear Playlist</button>
+                            <br/>
+                            <br/>
+                            <h5>Playlist</h5>
+                            <ul>
+                                <li ng-repeat="song in playlist">
+                                    <a play-from-playlist="song">{( song.title )}</a>
+                                    -
+                                    <a remove-from-playlist="song" data-index="{($index)}">
+                                        <small>(remove)</small>
+                                    </a>
+                                    <span ng-if="currentPlaying.id == song.id"> - (current)</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 

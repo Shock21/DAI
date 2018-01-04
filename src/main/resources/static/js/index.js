@@ -1,23 +1,33 @@
-var app = angular.module('app', ['ngSanitize', 'MassAutoComplete', 'ngAudio']);
-app.controller('mainCtrl', function ($scope, $http, $sce, $q, ngAudio) {
+var app = angular.module('app', ['ngSanitize', 'MassAutoComplete', 'ngAudio', 'angularSoundManager', 'NumberConvertService']);
+app.config([
+    '$interpolateProvider', function($interpolateProvider) {
+        return $interpolateProvider.startSymbol('{(').endSymbol(')}');
+    }
+])
+app.controller('mainCtrl', ['$scope', '$http', '$sce', 'numberConvert', 'angularPlayer', function ($scope, $http, $sce, numberConvert, angularPlayer) {
     $scope.dirty = {};
     $scope.tags = [];
     $scope.results = [];
     $scope.songLyrics = {};
+    $scope.songs = [];
+    $scope.playlist = [];
     $scope.active = true;
 
-    function add_tag(selected) {
-        //$scope.tags.push(selected);
-        $scope.dirty = {};
-
-        var ap = new APlayer({
-            element: document.getElementById('player'),                       // Optional, player element
-            theme: '#e6d0b2',                                                  // Optional, theme color, default: #b7daff
-            music: selected.music_data
-        });
-    }
+    // function add_tag(selected) {
+    //     //$scope.tags.push(selected);
+    //     $scope.dirty = {};
+    //
+    //     $scope.songs = selected.music_data;
+    //
+    //     // var ap = new APlayer({
+    //     //     element: document.getElementById('player'),                       // Optional, player element
+    //     //     theme: '#e6d0b2',                                                  // Optional, theme color, default: #b7daff
+    //     //     music: selected.music_data
+    //     // });
+    // }
 
     $scope.getLyrics = function() {
+        angularPlayer.currentTrackData();
         $http.post('/lyrics')
             .then(function (response) {
                 $scope.songLyrics = response.data;
@@ -36,21 +46,18 @@ app.controller('mainCtrl', function ($scope, $http, $sce, $q, ngAudio) {
         return $http.post('/search',{'contains': term.toLowerCase().trim()})
             .then(function (response) {
                 var results = [];
+                var id = 1;
+                var music = [];
 
                 if(response.data.artistSearch) {
-                    var music = [];
                     angular.forEach(response.data.songInfo, function (song) {
-                        music.push({title : song.songTitle, author : song.artistName , url : 'http://localhost:8080/audio?songName=' + song.songTitle  + '&artistName=' + song.artistName});
+                        music.push({id: numberConvert.convertNumber(id++), title : song.songTitle, artist : song.artistName , url : 'http://localhost:8080/play?songName=' + song.songTitle  + '&artistName=' + song.artistName});
                     });
                     results.push({label : $sce.trustAsHtml(response.data.artistName), value : response.data.artistName, music_data: music});
                 } else {
                     angular.forEach(response.data.songInfo, function (song) {
-                        var music = [{
-                            title: song.songTitle,
-                            author: song.artistName,
-                            url: 'http://localhost:8080/audio?songName=' + song.songTitle + '&artistName=' + song.artistName
-                        }];
-                        results.push({label: $sce.trustAsHtml(song.name), value: song.songTitle, music_data: music})
+                        music.push({id: numberConvert.convertNumber(id++), title : song.songTitle, artist : song.artistName , url : 'http://localhost:8080/play?songName=' + song.songTitle  + '&artistName=' + song.artistName});
+                        results.push({label: $sce.trustAsHtml(song.songTitle), value: song.songTitle, music_data: music})
                     });
                 }
 
@@ -59,11 +66,14 @@ app.controller('mainCtrl', function ($scope, $http, $sce, $q, ngAudio) {
 
     }
 
-    $scope.autocomplete_options = {
+    $scope.ac_options_users = {
         suggest: suggest_state,
-        on_select: add_tag
+        on_select: function (selected) {
+            $scope.dirty = {};
+            $scope.songs = selected.music_data;
+        }
     };
-});
+}]);
 
 
 
