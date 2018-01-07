@@ -1,10 +1,23 @@
-var app = angular.module('app', ['ngSanitize', 'MassAutoComplete', 'ngAudio', 'angularSoundManager', 'NumberConvertService']);
+var app = angular.module('app', ['ngSanitize', 'MassAutoComplete', 'ngAudio', 'angularSoundManager', 'NumberConvertService', 'ui.bootstrap']);
 app.config([
     '$interpolateProvider', function($interpolateProvider) {
         return $interpolateProvider.startSymbol('{(').endSymbol(')}');
     }
 ])
-app.controller('mainCtrl', ['$scope', '$http', '$sce', 'numberConvert', 'angularPlayer', function ($scope, $http, $sce, numberConvert, angularPlayer) {
+app.directive('ngFiles', ['$parse', function ($parse) {
+
+    function fn_link(scope, element, attrs) {
+        var onChange = $parse(attrs.ngFiles);
+        element.on('change', function (event) {
+            onChange(scope, { $file: event.target.files });
+        });
+    };
+
+    return {
+        link: fn_link
+    }
+} ])
+app.controller('mainCtrl', ['$scope', '$http', '$sce', '$uibModal', 'numberConvert', 'angularPlayer', function ($scope, $http, $sce, $uibModal, numberConvert, angularPlayer) {
     $scope.dirty = {};
     $scope.tags = [];
     $scope.results = [];
@@ -13,31 +26,12 @@ app.controller('mainCtrl', ['$scope', '$http', '$sce', 'numberConvert', 'angular
     $scope.playlist = [];
     $scope.active = true;
 
-    // function add_tag(selected) {
-    //     //$scope.tags.push(selected);
-    //     $scope.dirty = {};
-    //
-    //     $scope.songs = selected.music_data;
-    //
-    //     // var ap = new APlayer({
-    //     //     element: document.getElementById('player'),                       // Optional, player element
-    //     //     theme: '#e6d0b2',                                                  // Optional, theme color, default: #b7daff
-    //     //     music: selected.music_data
-    //     // });
-    // }
-
     $scope.getLyrics = function() {
         angularPlayer.currentTrackData();
-        $http.post('/lyrics')
+        $http.get('/lyrics?songTitle=' + angularPlayer.currentTrackData().title + '&artistName=' + angularPlayer.currentTrackData().artist)
             .then(function (response) {
-                $scope.songLyrics = response.data;
+                $scope.songLyrics = response.data.lyrics;
             });
-    }
-
-    function convert_duration(duration) {
-        return moment().startOf('day')
-            .seconds(duration)
-            .format('mm:ss');
     }
 
     function suggest_state(term) {
@@ -51,12 +45,12 @@ app.controller('mainCtrl', ['$scope', '$http', '$sce', 'numberConvert', 'angular
 
                 if(response.data.artistSearch) {
                     angular.forEach(response.data.songInfo, function (song) {
-                        music.push({id: numberConvert.convertNumber(id++), title : song.songTitle, artist : song.artistName , url : 'http://localhost:8080/play?songName=' + song.songTitle  + '&artistName=' + song.artistName});
+                        music.push({id: numberConvert.convertNumber(id++), title : song.songTitle, artist : song.artistName , url : 'http://localhost:8080/play?songName=' + song.songTitle});
                     });
                     results.push({label : $sce.trustAsHtml(response.data.artistName), value : response.data.artistName, music_data: music});
                 } else {
                     angular.forEach(response.data.songInfo, function (song) {
-                        music.push({id: numberConvert.convertNumber(id++), title : song.songTitle, artist : song.artistName , url : 'http://localhost:8080/play?songName=' + song.songTitle  + '&artistName=' + song.artistName});
+                        music.push({id: numberConvert.convertNumber(id++), title : song.songTitle, artist : song.artistName , url : 'http://localhost:8080/play?songName=' + song.songTitle});
                         results.push({label: $sce.trustAsHtml(song.songTitle), value: song.songTitle, music_data: music})
                     });
                 }
@@ -73,7 +67,49 @@ app.controller('mainCtrl', ['$scope', '$http', '$sce', 'numberConvert', 'angular
             $scope.songs = selected.music_data;
         }
     };
+
+    $scope.song = {
+        name: '',
+        artist: '',
+    };
+
+    $scope.songFile = null;
+
+    $scope.open = function () {
+        $uibModal.open({
+            templateUrl: 'modal-form.html', // loads the template
+            backdrop: true, // setting backdrop allows us to close the modal window on clicking outside the modal window
+            windowClass: 'modal', // windowClass - additional CSS class(es) to be added to a modal window template
+            controller: function ($scope, $uibModalInstance) {
+                $scope.getTheFiles = function ($file) {
+                    $scope.songFile = $file;
+                };
+
+                $scope.submit = function () {
+                    var fd = new FormData();
+                    fd.append('file', $scope.songFile[0]);
+                    fd.append('song', new Blob([JSON.stringify({'songName': $scope.song.name, 'artistName': $scope.song.artist})], {
+                        type: "application/json"
+                    }));
+                    $http.post('/upload', fd, {
+                        headers: {'Content-Type': undefined}
+                    }).then(function (response) {
+                        $uibModalInstance.dismiss('cancel');
+                    }, function (response) {
+                        $uibModalInstance.dismiss('cancel');
+                    });
+                }
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+            },
+            resolve: {
+                user: function () {
+                    return $scope.user;
+                }
+            }
+        });//end of modal.open
+    };
+
 }]);
-
-
 

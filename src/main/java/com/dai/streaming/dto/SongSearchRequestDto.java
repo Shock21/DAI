@@ -11,5 +11,5 @@ import lombok.Setter;
 public class SongSearchRequestDto {
 
     @Getter @Setter
-    String contains;
+    private String contains;
 }

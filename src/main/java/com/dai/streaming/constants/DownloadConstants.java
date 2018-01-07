@@ -12,4 +12,5 @@ public class DownloadConstants {
     public static final String CONTENT_LENGTH = "contentLength";
     public static final String FILENAME = "filename";
     public static final String LAST_MODIFIED = "lastModified";
+    public static final String LOCATION = "D:\\MusicPlaylist\\";
 }

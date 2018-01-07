@@ -13,14 +13,14 @@ import java.util.List;
 public class SongSearchDto {
 
     @Getter @Setter
-    String searchParam;
+    private String searchParam;
 
     @Getter @Setter
-    String artistName;
+    private String artistName;
 
     @Getter @Setter
-    Boolean artistSearch;
+    private Boolean artistSearch;
 
     @Getter @Setter
-    List<SongDto> songInfo;
+    private List<SongDto> songInfo;
 }

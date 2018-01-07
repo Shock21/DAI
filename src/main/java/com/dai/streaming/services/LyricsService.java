@@ -1,8 +1,8 @@
 package com.dai.streaming.services;
 
-import com.dai.streaming.dto.CurrentSong;
+import org.json.simple.JSONObject;
 
 public interface LyricsService {
 
-    public String getLyrics(CurrentSong currentSong);
+    public JSONObject getLyrics(String songTitle, String artistName);
 }

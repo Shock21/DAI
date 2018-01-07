@@ -1,0 +1,16 @@
+<div class="modal-header">
+    <h3>I'm a modal!</h3>
+</div>
+<form ng-submit="submit()">
+    <div class="modal-body">
+        <label>Artist</label>
+        <input ng-model="song.artist" />
+        <label>Song</label>
+        <input ng-model="song.name" />
+        <input type="file" name="file" ng-files="getTheFiles($file)" />
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        <input type="submit" class="btn primary-btn" value="Submit" />
+    </div>
+</form>

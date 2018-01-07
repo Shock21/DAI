@@ -4,6 +4,7 @@ import com.dai.streaming.dto.CurrentSong;
 import com.dai.streaming.repository.AutoCompleteRepository;
 import com.dai.streaming.services.LyricsService;
 import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -31,7 +32,7 @@ public class LyricsServiceImpl implements LyricsService {
     AutoCompleteRepository autoCompleteRepository;
 
     @Override
-    public String getLyrics(CurrentSong currentSong) {
+    public JSONObject getLyrics(String songTitle, String artistName) {
         rest = new RestTemplate();
         header = new HttpHeaders();
 
@@ -40,7 +41,7 @@ public class LyricsServiceImpl implements LyricsService {
         HttpEntity<String> requestEntity = new HttpEntity<String>("", header);
 
         try {
-            String urlString = endpoint + URLEncoder.encode(currentSong.getSongTitle(), "UTF-8") + "&q_artist=" + URLEncoder.encode(currentSong.getArtistName(), "UTF-8") + "&apikey=2a53d55cb64d9acf0f0891d42715d0b6";
+            String urlString = endpoint + URLEncoder.encode(songTitle, "UTF-8") + "&q_artist=" + URLEncoder.encode(artistName, "UTF-8") + "&apikey=2a53d55cb64d9acf0f0891d42715d0b6";
             url = new URI(urlString);
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -56,6 +57,19 @@ public class LyricsServiceImpl implements LyricsService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return jsonObject.get("lyrics_body").toString();
+
+        Object messageObject = jsonObject.get("message");
+        JSONObject messageJson = (JSONObject)messageObject;
+
+        Object bodyObject = messageJson.get("body");
+        JSONObject bodyJson = (JSONObject)bodyObject;
+
+        Object lyricsObject = bodyJson.get("lyrics");
+        JSONObject lyricsJson = (JSONObject)lyricsObject;
+
+        JSONObject lyrics = new JSONObject();
+        lyrics.put("lyrics", lyricsJson.get("lyrics_body"));
+
+        return lyrics;
     }
 }

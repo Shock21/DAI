@@ -1,5 +1,7 @@
 package com.dai.streaming.utils;
 
+import com.dai.streaming.dto.SongUploadDto;
+
 /**
  * Created by Tiberiu on 12/3/2016.
  */
@@ -16,6 +18,19 @@ public class StringsUtils {
     public static long sublong(String value, int beginIndex, int endIndex) {
         String substring = value.substring(beginIndex, endIndex);
         return (substring.length() > 0) ? Long.parseLong(substring) : -1;
+    }
+
+    public static String formatSongFileName(SongUploadDto songUploadDto) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(songUploadDto.getArtistName() + "-");
+        for(char c : songUploadDto.getSongName().toCharArray()) {
+            if(c == ' ') {
+                stringBuilder.append('_');
+            } else {
+                stringBuilder.append(c);
+            }
+        }
+        return stringBuilder.toString();
     }
 
 }
